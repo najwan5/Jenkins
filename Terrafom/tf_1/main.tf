@@ -50,6 +50,15 @@ resource "aws_instance" "web" {
   tags = {
     Name = "terraform-ec2"
   }
+  user_data = <<EOF
+  #!/bin/bash
+  curl -sfL https://get.docker.com -o docker.sh
+  chmod +x docker.sh
+  ./docker.sh
+  sudo usermod -aG docker ubuntu
+  docker run -d -p 80:80 najwan5/myapp:latest
+  EOF
+
 }
 
 resource "aws_network_interface" "networkInterface" {
